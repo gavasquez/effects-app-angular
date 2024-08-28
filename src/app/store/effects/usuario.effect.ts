@@ -5,22 +5,20 @@ import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { UsuarioService } from '../../services/usuario.service';
 
 @Injectable()
-export class UsuariosEffects {
+export class UsuarioEffects {
 
   constructor(
     private actions$: Actions,
     private usuarioService: UsuarioService,
   ){}
 
-  cargarUsuarios$ = createEffect(
+  cargarUsuario$ = createEffect(
     () => this.actions$.pipe(
-      ofType(usuariosActions.cargarUsuarios),
-      //tap( data => console.log('Effect tap', data)),
+      ofType(usuariosActions.cargarUsuario),
       mergeMap(
-        () => this.usuarioService.getUsers().pipe(
-          //tap(data => console.log("getUser", data))
-          map(users => usuariosActions.cargarUsuariosSuccess({usuarios: users})),
-          catchError(err => of (usuariosActions.cargarUsuariosError({payload: err})))
+          ( action ) => this.usuarioService.getUserById(action.id).pipe(
+          map(user => usuariosActions.cargarUsuarioSuccess({usuario: user})),
+          catchError(err => of (usuariosActions.cargarUsuarioError({payload: err})))
         )
       )
     )

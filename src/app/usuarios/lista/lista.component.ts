@@ -13,6 +13,8 @@ import { cargarUsuarios } from '../../store/actions';
 export class ListaComponent implements OnInit {
 
   usuarios: Usuario[] = [];
+  loading: boolean = false;
+  error: any;
 
   constructor(
     //public usuarioService: UsuarioService,
@@ -26,8 +28,10 @@ export class ListaComponent implements OnInit {
     }); */
     this.store.dispatch(cargarUsuarios());
 
-    this.store.select('usuarios').subscribe(({ users }) => {
+    this.store.select('usuarios').subscribe(({ users, loading, error }) => {
       this.usuarios = users;
+      this.loading = loading;
+      this.error = error;
     })
   }
 
